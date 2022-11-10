@@ -16,14 +16,15 @@ class ClasseController extends AbstractController
     public function getAllClasses(ClasseRepository $classeRepository, SerializerInterface $serializer): JsonResponse
     {
         $classeList = $classeRepository->findAll();
-        $jsonClasseList = $serializer->serialize($classeList, 'json');
+
+        $jsonClasseList = $serializer->serialize($classeList, 'json', ['groups' => 'getClasse']);
         return new JsonResponse($jsonClasseList, Response::HTTP_OK, ['accept' => 'json'], true);
     }
 
     #[Route('/api/classe/{id}', name: 'app_one_classe', methods: ["GET"])]
     public function getOneClasse(Classe $classe, SerializerInterface $serializer): JsonResponse
     {
-        $jsonClasse = $serializer->serialize($classe, 'json');
+        $jsonClasse = $serializer->serialize($classe, 'json', ['groups' => 'getClasse']);
         return new JsonResponse($jsonClasse, Response::HTTP_OK, ['accept' => 'json'], true);
     }
 }
