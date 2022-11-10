@@ -57,4 +57,5 @@ class ClasseController extends AbstractController
         
         return new JsonResponse($jsonClasse, Response::HTTP_CREATED, ["Location" => $location], true);
     }
+
 }
