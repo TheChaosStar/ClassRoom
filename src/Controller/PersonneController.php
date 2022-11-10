@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Personne;
 use App\Repository\PersonneRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,10 +22,19 @@ class PersonneController extends AbstractController
         return new JsonResponse($jsonPersonneList, Response::HTTP_OK, ['accept' => 'json'], true);
     }
 
-    #[Route('/api/classe/{id}', name: 'app_one_classe', methods: ["GET"])]
+    #[Route('/api/personne/{id}', name: 'app_one_personne', methods: ["GET"])]
     public function getOneClasse(Personne $personne, SerializerInterface $serializer): JsonResponse
     {
         $jsonPersonne = $serializer->serialize($personne, 'json', ['groups' => 'getPersonne']);
         return new JsonResponse($jsonPersonne, Response::HTTP_OK, ['accept' => 'json'], true);
+    }
+
+    #[Route('/api/personne/{id}', name: 'app_delete_personne', methods: ['DELETE'])]
+    public function deleteP(Personne $personne, EntityManagerInterface $em): Response
+    {
+        $em->remove($personne);
+        $em->flush();
+
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 }

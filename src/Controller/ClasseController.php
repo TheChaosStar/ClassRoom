@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Classe;
 use App\Repository\ClasseRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,5 +27,14 @@ class ClasseController extends AbstractController
     {
         $jsonClasse = $serializer->serialize($classe, 'json', ['groups' => 'getClasse']);
         return new JsonResponse($jsonClasse, Response::HTTP_OK, ['accept' => 'json'], true);
+    }
+
+    #[Route('/api/classe/{id}', name: 'app_delete_classe', methods: ['DELETE'])]
+    public function deleteClasse(Classe $classe, EntityManagerInterface $em): Response
+    {
+        $em->remove($classe);
+        $em->flush();
+
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 }
